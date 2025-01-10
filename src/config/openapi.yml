@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: |
+    The Node Api Server Template
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: 0.1.2
+
+servers:
+  - url: /api/v1
+
+paths:
+  /counter:
+    get:
+      summary: retrieve the value of the counter
+      operationId: getCounter
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counter'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/FailureResponse'
+    post:
+      summary: change the value of the counter
+      operationId: setCounter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Counter'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counter'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/FailureResponse'
+components:
+  schemas:
+    Counter:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+    FailureResponse:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: string
+          enum: [failed, error]
+        message:
+          type: string
